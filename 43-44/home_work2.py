@@ -13,8 +13,8 @@ class Programmer:
         self.salary += time * self.grade_pay[self.grade]
         
         if self.grade == 'Senior' and self.flag:
-            self.salary += time
-
+            self.salary += time * 1
+ 
     def rise(self):
         if self.grade == 'Senior':
            self.flag = True 
