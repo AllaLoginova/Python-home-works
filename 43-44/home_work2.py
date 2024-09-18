@@ -6,18 +6,18 @@ class Programmer:
         self.grade = grade
         self.work_hours = 0
         self.salary = 0
-        self.flag = False
+        self.counter = 0
 
     def work(self, time):
         self.work_hours += time
         self.salary += time * self.grade_pay[self.grade]
         
-        if self.grade == 'Senior' and self.flag:
-            self.salary += time * 1
+        if self.grade == 'Senior':
+            self.salary += time * self.counter
  
     def rise(self):
         if self.grade == 'Senior':
-           self.flag = True 
+           self.counter += 1
 
         elif self.grade == 'Junior':
             self.grade = 'Middle'
@@ -41,12 +41,12 @@ print(programmer.info())
 programmer.rise()
 programmer.work(250)
 print(programmer.info())
-print('------------------------')
 programmer.rise()
-programmer.work(250)
+programmer.work(100)
 print(programmer.info())
-print('------------------------')
-programmer.rise()
-programmer.work(250)
-print(programmer.info())
-print('------------------------')
+
+# Васильев Иван 750ч. 7500тгр.
+# Васильев Иван 1250ч. 15000тгр.
+# Васильев Иван 1500ч. 20000тгр.
+# Васильев Иван 1750ч. 25250тгр.
+# Васильев Иван 1850ч. 27450тгр.
