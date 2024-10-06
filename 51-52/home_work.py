@@ -22,6 +22,8 @@ class Game:
 
         for _ in range(self.num_of_throws):
             score1 += self.throw_cube()
+
+        for _ in range(self.num_of_throws):
             score2 += self.throw_cube()
 
         if score1 > score2:
