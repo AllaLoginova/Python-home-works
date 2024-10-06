@@ -1,5 +1,6 @@
 from random import randint
 
+
 class Player:
     def __init__(self, name, wins=0):
         self.name = name
@@ -11,7 +12,8 @@ class Game:
         self.player1 = player1
         self.player2 = player2
 
-    def throw_cube(self):
+    @staticmethod
+    def throw_cube():
         score = 0
         for _ in range(2):
             score += randint(1, 6)
@@ -44,4 +46,4 @@ player2 = Player("Bob")
 game = Game(player1, player2)
 game.play_round()
 game.play_round()
-game.get_statistics() 
+game.get_statistics()
