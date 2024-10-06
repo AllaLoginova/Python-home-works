@@ -24,9 +24,9 @@ class Game:
 
         for _ in range(self.num_of_throws):
             score2 += self.throw_cube()
+            
         if score1 > score2:
             self.player1.wins += 1
-
             res = f"Победил {self.player1.name}"
         elif score2 > score1:
             self.player2.wins += 1
