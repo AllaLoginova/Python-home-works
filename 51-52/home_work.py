@@ -18,14 +18,12 @@ class Game:
     def play_round(self):
         score1 = 0
         score2 = 0
-        # res = ""
 
         for _ in range(self.num_of_throws):
             score1 += self.throw_cube()
 
         for _ in range(self.num_of_throws):
             score2 += self.throw_cube()
-
         if score1 > score2:
             self.player1.wins += 1
 
