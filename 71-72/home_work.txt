@@ -1,0 +1,75 @@
+# 16 --------------------------------------------------------
+
+SELECT name, count(name) AS count FROM Passenger
+    JOIN Pass_in_trip ON Passenger.id = Pass_in_trip.passenger
+GROUP BY name
+ORDER BY count DESC, name;
+
+# 17 ---------------------------------------------------------
+
+SELECT member_name, status, SUM(unit_price * amount) AS costs FROM FamilyMembers
+    JOIN Payments 
+    ON FamilyMembers.member_id = Payments.family_member AND YEAR(date) = 2005
+GROUP BY member_name, status
+
+# 18 ---------------------------------------------------------
+
+SELECT member_name FROM FamilyMembers
+WHERE birthday = (SELECT MIN(birthday) FROM FamilyMembers);
+
+# 19 ---------------------------------------------------------
+
+SELECT DISTINCT status FROM FamilyMembers
+    JOIN Payments 
+    ON FamilyMembers.member_id = Payments.family_member
+    JOIN Goods ON Payments.good = Goods.good_id 
+WHERE Goods.good_name = 'potato'
+
+# 20 ---------------------------------------------------------
+
+SELECT status, member_name, SUM(amount * unit_price) AS costs FROM FamilyMembers
+    JOIN Payments ON Payments.family_member = FamilyMembers.member_id
+    JOIN Goods ON Payments.good = Goods.good_id
+    JOIN GoodTypes ON Goods.type = GoodTypes.good_type_id 
+    AND GoodTypes.good_type_name = 'entertainment'
+GROUP BY status, member_name
+
+# 21 ---------------------------------------------------------
+
+SELECT DISTINCT good_name FROM Goods
+    JOIN Payments ON Goods.good_id = Payments.good
+WHERE good_id IN(
+    (SELECT good FROM Payments
+    GROUP BY good
+    HAVING count(good) > 1)
+    )
+
+# 22 ---------------------------------------------------------
+
+SELECT member_name FROM FamilyMembers
+WHERE status = 'mother';
+
+# 23 ---------------------------------------------------------
+
+SELECT good_name, unit_price FROM Payments
+    JOIN Goods ON Payments.good = Goods.good_id
+    JOIN GoodTypes ON Goods.type = GoodTypes.good_type_id
+        AND GoodTypes.good_type_name = 'delicacies'
+ORDER BY unit_price DESC 
+LIMIT 1
+
+# 24 ---------------------------------------------------------
+
+SELECT member_name, SUM(amount * unit_price) AS costs
+FROM FamilyMembers
+    JOIN Payments 
+    ON FamilyMembers.member_id = Payments.family_member AND YEAR(date) = 2005 
+        AND MONTH(date) = 6
+GROUP  BY member_name
+
+# 25 ---------------------------------------------------------
+
+SELECT good_name FROM Goods
+WHERE good_id NOT IN(
+SELECT good FROM Payments WHERE YEAR(date) = 2005
+)
