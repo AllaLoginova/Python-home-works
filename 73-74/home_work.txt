@@ -1,0 +1,31 @@
+-------- #1 -----------------
+
+CREATE VIEW num_of_purchases AS
+    SELECT fio,
+           count(fio_id) AS amount_purchases
+      FROM purchases
+     GROUP BY fio;
+
+-------- #2 -----------------
+
+CREATE VIEW fio_and_product AS
+    SELECT fio,
+           product_name
+      FROM purchases;
+
+-------- #3 -----------------
+
+CREATE TABLE fio_log (
+    fio_id   INTEGER,
+    old_fio  TEXT,
+    new_fio  TEXT,
+    datetime TEXT
+);
+
+create trigger fio_change
+after update of fio on customer
+begin
+ INSERT INTO fio_log (fio_id, old_fio, new_fio, datetime)
+ VALUES (new.fio_id, old.fio, new.fio, datetime());
+end;
+
