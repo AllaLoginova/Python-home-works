@@ -1,6 +1,5 @@
 import sqlite3
 
-
 with sqlite3.connect('notes.db') as connection:
     cursor = connection.cursor()
 
@@ -26,37 +25,43 @@ with sqlite3.connect('notes.db') as connection:
 class Database:
     def __init__(self, db_name):
         self.db_name = db_name
+        self.con = sqlite3.connect(self.db_name)
 
     def add_note(self, note, raiting, user_id):
-        with sqlite3.connect(self.db_name) as con:
+        with self.con as con:
             cur = con.cursor()
             cur.execute('INSERT INTO note (name, raiting, user_id) VALUES (?, ?, ?)', (note, raiting, user_id))
-
+            
     def get_one_note(self, note_id, user_id):
-        with sqlite3.connect(self.db_name) as con:
-            cur = con.cursor()
+        # with self.con as con:
+            cur = self.con.cursor()
             cur.execute('SELECT name, raiting FROM note WHERE ID = ? AND user_id = ?', (note_id, user_id))
             row = cur.fetchall()
             return row
 
     def get_all_notes(self, user_id):
-        with sqlite3.connect(self.db_name) as con:
-            cur = con.cursor()
-            cur.execute('SELECT * FROM note WHERE user_id = ?', (user_id, ))
+        # with self.con as con:
+            cur = self.con.cursor()
+            cur.execute('SELECT * FROM note WHERE user_id = ?', (user_id,))
             rows = cur.fetchall()
             return rows
 
     def get_most_popular_notes(self, user_id):
-        with sqlite3.connect(self.db_name) as con:
-            cur = con.cursor()
-            cur.execute('SELECT name FROM note WHERE raiting > 3 and user_id = ?', (user_id, ))
+        # with self.con as con:
+            cur = self.con.cursor()
+            cur.execute('SELECT name FROM note WHERE raiting > 3 and user_id = ?', (user_id,))
             rows = cur.fetchall()
             return rows
 
     def delete_all_notes(self, user_id):
-        with sqlite3.connect(self.db_name) as con:
+        with self.con as con:
             cur = con.cursor()
-            cur.execute('DELETE FROM note WHERE user_id = ?', (user_id, ))
+            cur.execute('DELETE FROM note WHERE user_id = ?', (user_id,))
+
+    def __del__(self):
+        print('Соединение закрыто')
+        self.con.close()
+
 
 db = Database('notes.db')
 
@@ -78,7 +83,6 @@ with sqlite3.connect(db_name) as con:
     else:
         print('Неверный логин или пароль')
 
-
 while True and auth:
     print('Что хотите сделать?')
     print('1 - прочитать все заметки')
@@ -94,7 +98,7 @@ while True and auth:
         rows = db.get_all_notes(user_id)
         print('Вот все заметки 👁️')
         for row in rows:
-           print(f"Название: {row[1]}, Рейтинг: {row[2]}")
+            print(f"Название: {row[1]}, Рейтинг: {row[2]}")
 
     if res == '2':
         note_id = input('Введите id заметки ')
@@ -120,4 +124,3 @@ while True and auth:
 
     if res == 'q':
         break
-
