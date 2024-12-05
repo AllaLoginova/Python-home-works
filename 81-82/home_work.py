@@ -89,14 +89,14 @@ class TaskModelSQL:
         return d
 
 
-token = '7919431374:AAEePdBPdImQnAbONyI5QbHL1Jwxqxtzi7w'
+token = ''
 bot = telebot.TeleBot(token)
 
 user_state = ''
 ADD_STATE = 'add'
 DEL_DATE = 'del'
 
-db_name = 'bot_todo.db'
+db_name = ''
 db = TaskModelSQL(db_name)
 
 
