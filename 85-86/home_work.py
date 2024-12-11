@@ -80,7 +80,7 @@ class TaskModelORM:
             session.commit()
 
 
-token = '7919431374:AAEePdBPdImQnAbONyI5QbHL1Jwxqxtzi7w'
+token = ''
 bot = telebot.TeleBot(token)
 
 user_state = ''
