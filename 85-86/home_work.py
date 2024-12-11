@@ -1,13 +1,13 @@
 import telebot
 from  typing import List
 
-from sqlalchemy.orm.sync import update
+# from sqlalchemy.orm.sync import update
 from telebot import types
 
 from sqlalchemy import create_engine
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session, relationship
-from sqlalchemy import select, ForeignKey, delete
+from sqlalchemy import select, ForeignKey, delete, update
 
 db_name = 'bot_todo.db'
 engine = create_engine(f'sqlite:///{db_name}')
@@ -139,11 +139,11 @@ def change_status(message):
 
 @bot.message_handler(regexp='удалить задачу')
 @bot.message_handler(commands=["del"])
-def delete(message):
+def delete_task(message):
     global user_state
     user_state = DEL_STATE
 
-    telegram_id = message.chat.id
+    telegram_id = message.chat.id # -----------------------------
     user = db.get_user(telegram_id)
     tasks = db.get_tasks(user.id)
     tasks_str = 'Выбирай задачу: \n\n'
