@@ -23,7 +23,7 @@ class Task(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     status: Mapped[int]
-    user_id: Mapped[int] = mapped_column(ForeignKey('user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
 
     user: Mapped["User"] = relationship(back_populates='task')
 
@@ -80,7 +80,7 @@ class TaskModelORM:
             session.commit()
 
 
-token = ''
+token = '7919431374:AAEePdBPdImQnAbONyI5QbHL1Jwxqxtzi7w'
 bot = telebot.TeleBot(token)
 
 user_state = ''
@@ -108,7 +108,7 @@ def start(message):
 
     telegram_id = message.chat.id
     user = db.get_user(telegram_id)
-    print(telegram_id, user)
+    # print(telegram_id, user)
     if not user:
         db.add_user(telegram_id)
         bot.reply_to(message, 'я вас добавил ')
@@ -130,8 +130,8 @@ def change_status(message):
     user_state = CHANGE_STATE
     telegram_id = message.chat.id
     user = db.get_user(telegram_id)
-    tasks = db.get_tasks(user['id'])
-    tasks = [f"id {task['id']}: {task['name']} => статус {task['status']}" for task in tasks]
+    tasks = db.get_tasks(user.id)
+    tasks = [f"id {task.id}: {task.name} => статус {task.status}" for task in tasks]
     tasks_string = '\n'.join(tasks)
     bot.reply_to(message, f'Введи id и новый статус задачи:\n{tasks_string}')
 
@@ -145,10 +145,10 @@ def delete(message):
 
     telegram_id = message.chat.id
     user = db.get_user(telegram_id)
-    tasks = db.get_tasks(user['id'])
+    tasks = db.get_tasks(user.id)
     tasks_str = 'Выбирай задачу: \n\n'
     for number, task in enumerate(tasks, 1):
-        tasks_str += f'{number}. {task["name"]} \n'
+        tasks_str += f'{number}. {task.name} \n'
     bot.reply_to(message, tasks_str)
 
 
@@ -160,10 +160,10 @@ def get_task_list(message):
     if not user:
         return bot.reply_to(message, 'вас нет в базе ')
 
-    tasks = db.get_tasks(user['id'])
+    tasks = db.get_tasks(user.id)
     if not tasks:
         return bot.reply_to(message, 'у вас нет задач ')
-    tasks = [f"{task['name']} => статус {task['status']}" for task in tasks]
+    tasks = [f"{task.name} => статус {task.status}" for task in tasks]
     tasks_string = '\n'.join(tasks)
     bot.reply_to(message, tasks_string)
 
@@ -195,7 +195,7 @@ def get_task(message):
         status = message.text.split()[-1]
         task = ' '.join(task)
 
-        db.add_task(task, status, user['id'])
+        db.add_task(task, status, user.id)
         user_state = ''
         bot.reply_to(message, 'Добавил в базу')
 
@@ -208,21 +208,17 @@ def get_task(message):
 
         user = db.get_user(telegram_id)
         print(user)
-        tasks = db.get_tasks(user['id'])
+        tasks = db.get_tasks(user.id)
         print(tasks)
 
         if 0 < task_number < len(tasks)+1:
             task = tasks[task_number-1]
-            db.delete_task(task['id'], user['id'])
+            db.delete_task(task.id, user.id)
             bot.reply_to(message, 'удалил задачу')
         else:
             print('такой задачи нет')
 
     if user_state == CHANGE_STATE:
-        # tasks = db.get_tasks(user['id'])
-        # tasks = [f"{task['id']}: {task['name']} => статус {task['status']}" for task in tasks]
-        # tasks_string = '\n'.join(tasks)
-        # bot.reply_to(message, f'Введи id и новый статус задачи:\n{tasks_string}')
         task_id = message.text.split()[0]
         status = message.text.split()[1]
 
