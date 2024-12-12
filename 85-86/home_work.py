@@ -76,11 +76,14 @@ class TaskModelORM:
 
     def change_status(self, status, id):
         with Session(self.engine) as session:
-            session.execute(update(Task).set(status=status).where(Task.id == id))
+            session.execute(update(Task).where(Task.id == id).values(status=status))
+            # update(user_table).
+            # where(user_table.c.id == 5).
+            # values(name='user #5')
             session.commit()
 
 
-token = ''
+token = '7919431374:AAEePdBPdImQnAbONyI5QbHL1Jwxqxtzi7w'
 bot = telebot.TeleBot(token)
 
 user_state = ''
@@ -139,11 +142,11 @@ def change_status(message):
 
 @bot.message_handler(regexp='удалить задачу')
 @bot.message_handler(commands=["del"])
-def delete_task(message):
+def del_task(message):
     global user_state
     user_state = DEL_STATE
 
-    telegram_id = message.chat.id # -----------------------------
+    telegram_id = message.chat.id
     user = db.get_user(telegram_id)
     tasks = db.get_tasks(user.id)
     tasks_str = 'Выбирай задачу: \n\n'
