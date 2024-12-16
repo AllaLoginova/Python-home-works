@@ -45,7 +45,8 @@ class User(Base):
 
 class TaskModelORM:
     def __init__(self, db_name):
-        self.engine = create_engine(f'sqlite:///{db_name}')
+        # self.engine = create_engine(f'sqlite:///{db_name}')
+        self.engine = create_engine(f'{db_name}')
 
     def get_tasks(self, user_id):
         with Session(self.engine) as session:
