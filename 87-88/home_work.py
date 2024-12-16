@@ -9,8 +9,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session, relationship
 from sqlalchemy import select, ForeignKey, delete, update
 
-db_name = 'bot_todo.db'
-engine = create_engine(f'sqlite:///{db_name}')
 
 
 class Base(DeclarativeBase):
