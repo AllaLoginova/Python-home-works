@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Товары</title>
+</head>
+<body style="background-color: rgba(96, 174, 186, 0.499)">
+    
+<h2 style="font-family: Arial, Helvetica, sans-serif">Товары и цены</h2>
+
+{% for item in items_data %}
+<p style="font-family: Arial, Helvetica, sans-serif">{{ item['name'] }} : {{ item['price'] }}</p>
+{% endfor %}
+
+</body>
+</html>
